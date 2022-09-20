@@ -8,7 +8,7 @@ using MediatR;
 namespace gp_Portal.Application.ServicioLinea.Queries.GetServiciosLineaWithPagination;
 public record GetServiciosLineaWithPaginationQuery : IRequest<PaginatedList<ServiciosLineaBriefDto>>
 {
-    public int IdLinea { get; init; }
+    public int LineaId { get; init; }
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
 
@@ -28,7 +28,7 @@ public class GetServiciosLineaWithPaginationQueryHandler : IRequestHandler<GetSe
     public async Task<PaginatedList<ServiciosLineaBriefDto>> Handle(GetServiciosLineaWithPaginationQuery request, CancellationToken cancellationToken)
     {
         return await _context.ServiciosLineas
-            .Where(x => x.IdLinea == request.IdLinea)
+            .Where(x => x.LineaId == request.LineaId)
             .OrderBy(x => x.StartTime)
             .ProjectTo<ServiciosLineaBriefDto>(_mapper.ConfigurationProvider)
             .PaginatedListAsync(request.PageNumber, request.PageSize);

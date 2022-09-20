@@ -12,8 +12,8 @@ using gp_Portal.Infrastructure.Persistence;
 namespace gp_Portal.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220919174309_maxlength")]
-    partial class maxlength
+    [Migration("20220920222719_second")]
+    partial class second
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -202,6 +202,50 @@ namespace gp_Portal.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Lineas");
+                });
+
+            modelBuilder.Entity("gp_Portal.Domain.Entities.ServiciosLineaBE", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<TimeSpan?>("EndTime")
+                        .HasColumnType("time");
+
+                    b.Property<bool>("IsBorrado")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("LineaId")
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan?>("StartTime")
+                        .HasColumnType("time");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LineaId");
+
+                    b.ToTable("ServiciosLineas");
                 });
 
             modelBuilder.Entity("gp_Portal.Domain.Entities.TodoItem", b =>
@@ -487,6 +531,17 @@ namespace gp_Portal.Infrastructure.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("gp_Portal.Domain.Entities.ServiciosLineaBE", b =>
+                {
+                    b.HasOne("gp_Portal.Domain.Entities.LineaBE", "Linea")
+                        .WithMany("Servicios")
+                        .HasForeignKey("LineaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Linea");
+                });
+
             modelBuilder.Entity("gp_Portal.Domain.Entities.TodoItem", b =>
                 {
                     b.HasOne("gp_Portal.Domain.Entities.TodoList", "List")
@@ -570,6 +625,11 @@ namespace gp_Portal.Infrastructure.Persistence.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("gp_Portal.Domain.Entities.LineaBE", b =>
+                {
+                    b.Navigation("Servicios");
                 });
 
             modelBuilder.Entity("gp_Portal.Domain.Entities.TodoList", b =>

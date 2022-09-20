@@ -5,7 +5,7 @@ public class GetServiciosLineaWithPaginationQueryValidator : AbstractValidator<G
 {
     public GetServiciosLineaWithPaginationQueryValidator()
     {
-        RuleFor(x => x.IdLinea)
+        RuleFor(x => x.LineaId)
             .NotEmpty().WithMessage("IdLinea is required.");
 
         //RuleFor(x => x.PageNumber)

@@ -12,8 +12,8 @@ using gp_Portal.Infrastructure.Persistence;
 namespace gp_Portal.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220920150110_Servicios")]
-    partial class Servicios
+    [Migration("20220920221504_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

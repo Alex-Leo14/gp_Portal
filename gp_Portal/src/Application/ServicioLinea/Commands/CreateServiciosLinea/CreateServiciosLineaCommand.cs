@@ -6,10 +6,10 @@ using MediatR;
 namespace gp_Portal.Application.ServicioLinea.Commands.CreateServiciosLinea;
 public record CreateServiciosLineaCommand : IRequest<int>
 {
-    public int IdLinea { get; init; }
+    public int LineaId { get; init; }
 
-    public Timer? StartTime { get; set; }
-    public Timer? EndTime { get; set; }
+    public TimeSpan? StartTime { get; set; }
+    public TimeSpan? EndTime { get; set; }
     public bool Status { get; set; }
     public bool IsBorrado { get; set; }
 }
@@ -27,8 +27,11 @@ public class CreateServiciosLineaCommandHandler : IRequestHandler<CreateServicio
     {
         var entity = new ServiciosLineaBE
         {
-            IdLinea = request.IdLinea,
-            //IdLinea = request.IdLinea,
+            LineaId = request.LineaId,
+            StartTime = request.StartTime,
+            EndTime = request.EndTime,
+            Status = request.Status,
+            IsBorrado = false,
         };
 
         entity.AddDomainEvent(new ServiciosLineaCreatedEvent(entity));

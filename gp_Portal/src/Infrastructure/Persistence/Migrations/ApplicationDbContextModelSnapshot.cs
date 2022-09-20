@@ -220,9 +220,6 @@ namespace gp_Portal.Infrastructure.Persistence.Migrations
                     b.Property<TimeSpan?>("EndTime")
                         .HasColumnType("time");
 
-                    b.Property<int>("IdLinea")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsBorrado")
                         .HasColumnType("bit");
 
@@ -233,18 +230,18 @@ namespace gp_Portal.Infrastructure.Persistence.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<int>("LineaId")
+                        .HasColumnType("int");
+
                     b.Property<TimeSpan?>("StartTime")
                         .HasColumnType("time");
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
-                    b.Property<int>("lineaId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("lineaId");
+                    b.HasIndex("LineaId");
 
                     b.ToTable("ServiciosLineas");
                 });
@@ -534,13 +531,13 @@ namespace gp_Portal.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("gp_Portal.Domain.Entities.ServiciosLineaBE", b =>
                 {
-                    b.HasOne("gp_Portal.Domain.Entities.LineaBE", "linea")
+                    b.HasOne("gp_Portal.Domain.Entities.LineaBE", "Linea")
                         .WithMany("Servicios")
-                        .HasForeignKey("lineaId")
+                        .HasForeignKey("LineaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("linea");
+                    b.Navigation("Linea");
                 });
 
             modelBuilder.Entity("gp_Portal.Domain.Entities.TodoItem", b =>

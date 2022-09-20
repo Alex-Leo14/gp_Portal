@@ -240,7 +240,7 @@ export class LineaBEClient implements ILineaBEClient {
 }
 
 export interface IServiciosLineaClient {
-    getServiciosLineaWithPagination(idLinea: number | undefined, pageNumber: number | undefined, pageSize: number | undefined): Observable<PaginatedListOfServiciosLineaBriefDto>;
+    getServiciosLineaWithPagination(lineaId: number | undefined, pageNumber: number | undefined, pageSize: number | undefined): Observable<PaginatedListOfServiciosLineaBriefDto>;
     create(command: CreateServiciosLineaCommand): Observable<number>;
     update(id: number, command: UpdateServiciosLineaCommand): Observable<FileResponse>;
     delete(id: number): Observable<FileResponse>;
@@ -259,12 +259,12 @@ export class ServiciosLineaClient implements IServiciosLineaClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    getServiciosLineaWithPagination(idLinea: number | undefined, pageNumber: number | undefined, pageSize: number | undefined): Observable<PaginatedListOfServiciosLineaBriefDto> {
+    getServiciosLineaWithPagination(lineaId: number | undefined, pageNumber: number | undefined, pageSize: number | undefined): Observable<PaginatedListOfServiciosLineaBriefDto> {
         let url_ = this.baseUrl + "/api/ServiciosLinea?";
-        if (idLinea === null)
-            throw new Error("The parameter 'idLinea' cannot be null.");
-        else if (idLinea !== undefined)
-            url_ += "IdLinea=" + encodeURIComponent("" + idLinea) + "&";
+        if (lineaId === null)
+            throw new Error("The parameter 'lineaId' cannot be null.");
+        else if (lineaId !== undefined)
+            url_ += "LineaId=" + encodeURIComponent("" + lineaId) + "&";
         if (pageNumber === null)
             throw new Error("The parameter 'pageNumber' cannot be null.");
         else if (pageNumber !== undefined)
@@ -1163,6 +1163,7 @@ export class LineaDto implements ILineaDto {
     route?: string | undefined;
     direction?: number;
     status?: boolean;
+    listServicio?: ServiciosLineaDto[];
 
     constructor(data?: ILineaDto) {
         if (data) {
@@ -1180,6 +1181,11 @@ export class LineaDto implements ILineaDto {
             this.route = _data["route"];
             this.direction = _data["direction"];
             this.status = _data["status"];
+            if (Array.isArray(_data["listServicio"])) {
+                this.listServicio = [] as any;
+                for (let item of _data["listServicio"])
+                    this.listServicio!.push(ServiciosLineaDto.fromJS(item));
+            }
         }
     }
 
@@ -1197,6 +1203,11 @@ export class LineaDto implements ILineaDto {
         data["route"] = this.route;
         data["direction"] = this.direction;
         data["status"] = this.status;
+        if (Array.isArray(this.listServicio)) {
+            data["listServicio"] = [];
+            for (let item of this.listServicio)
+                data["listServicio"].push(item.toJSON());
+        }
         return data;
     }
 }
@@ -1207,6 +1218,63 @@ export interface ILineaDto {
     route?: string | undefined;
     direction?: number;
     status?: boolean;
+    listServicio?: ServiciosLineaDto[];
+}
+
+export class ServiciosLineaDto implements IServiciosLineaDto {
+    id?: number;
+    idLinea?: number;
+    startTime?: string | undefined;
+    endTime?: string | undefined;
+    status?: boolean;
+    isBorrado?: boolean;
+
+    constructor(data?: IServiciosLineaDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.idLinea = _data["idLinea"];
+            this.startTime = _data["startTime"];
+            this.endTime = _data["endTime"];
+            this.status = _data["status"];
+            this.isBorrado = _data["isBorrado"];
+        }
+    }
+
+    static fromJS(data: any): ServiciosLineaDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ServiciosLineaDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["idLinea"] = this.idLinea;
+        data["startTime"] = this.startTime;
+        data["endTime"] = this.endTime;
+        data["status"] = this.status;
+        data["isBorrado"] = this.isBorrado;
+        return data;
+    }
+}
+
+export interface IServiciosLineaDto {
+    id?: number;
+    idLinea?: number;
+    startTime?: string | undefined;
+    endTime?: string | undefined;
+    status?: boolean;
+    isBorrado?: boolean;
 }
 
 export class CreateLineaBECommand implements ICreateLineaBECommand {
@@ -1375,9 +1443,9 @@ export interface IPaginatedListOfServiciosLineaBriefDto {
 
 export class ServiciosLineaBriefDto implements IServiciosLineaBriefDto {
     id?: number;
-    idLinea?: number;
-    startTime?: Timer | undefined;
-    endTime?: Timer | undefined;
+    lineaId?: number;
+    startTime?: string;
+    endTime?: string | undefined;
     status?: boolean;
     isBorrado?: boolean;
 
@@ -1393,9 +1461,9 @@ export class ServiciosLineaBriefDto implements IServiciosLineaBriefDto {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
-            this.idLinea = _data["idLinea"];
-            this.startTime = _data["startTime"] ? Timer.fromJS(_data["startTime"]) : <any>undefined;
-            this.endTime = _data["endTime"] ? Timer.fromJS(_data["endTime"]) : <any>undefined;
+            this.lineaId = _data["lineaId"];
+            this.startTime = _data["startTime"];
+            this.endTime = _data["endTime"];
             this.status = _data["status"];
             this.isBorrado = _data["isBorrado"];
         }
@@ -1411,9 +1479,9 @@ export class ServiciosLineaBriefDto implements IServiciosLineaBriefDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["idLinea"] = this.idLinea;
-        data["startTime"] = this.startTime ? this.startTime.toJSON() : <any>undefined;
-        data["endTime"] = this.endTime ? this.endTime.toJSON() : <any>undefined;
+        data["lineaId"] = this.lineaId;
+        data["startTime"] = this.startTime;
+        data["endTime"] = this.endTime;
         data["status"] = this.status;
         data["isBorrado"] = this.isBorrado;
         return data;
@@ -1422,72 +1490,17 @@ export class ServiciosLineaBriefDto implements IServiciosLineaBriefDto {
 
 export interface IServiciosLineaBriefDto {
     id?: number;
-    idLinea?: number;
-    startTime?: Timer | undefined;
-    endTime?: Timer | undefined;
+    lineaId?: number;
+    startTime?: string;
+    endTime?: string | undefined;
     status?: boolean;
     isBorrado?: boolean;
 }
 
-export abstract class MarshalByRefObject implements IMarshalByRefObject {
-
-    constructor(data?: IMarshalByRefObject) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-    }
-
-    static fromJS(data: any): MarshalByRefObject {
-        data = typeof data === 'object' ? data : {};
-        throw new Error("The abstract class 'MarshalByRefObject' cannot be instantiated.");
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        return data;
-    }
-}
-
-export interface IMarshalByRefObject {
-}
-
-export class Timer extends MarshalByRefObject implements ITimer {
-
-    constructor(data?: ITimer) {
-        super(data);
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-    }
-
-    static override fromJS(data: any): Timer {
-        data = typeof data === 'object' ? data : {};
-        let result = new Timer();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface ITimer extends IMarshalByRefObject {
-}
-
 export class CreateServiciosLineaCommand implements ICreateServiciosLineaCommand {
-    idLinea?: number;
-    startTime?: Timer | undefined;
-    endTime?: Timer | undefined;
+    lineaId?: number;
+    startTime?: string | undefined;
+    endTime?: string | undefined;
     status?: boolean;
     isBorrado?: boolean;
 
@@ -1502,9 +1515,9 @@ export class CreateServiciosLineaCommand implements ICreateServiciosLineaCommand
 
     init(_data?: any) {
         if (_data) {
-            this.idLinea = _data["idLinea"];
-            this.startTime = _data["startTime"] ? Timer.fromJS(_data["startTime"]) : <any>undefined;
-            this.endTime = _data["endTime"] ? Timer.fromJS(_data["endTime"]) : <any>undefined;
+            this.lineaId = _data["lineaId"];
+            this.startTime = _data["startTime"];
+            this.endTime = _data["endTime"];
             this.status = _data["status"];
             this.isBorrado = _data["isBorrado"];
         }
@@ -1519,9 +1532,9 @@ export class CreateServiciosLineaCommand implements ICreateServiciosLineaCommand
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["idLinea"] = this.idLinea;
-        data["startTime"] = this.startTime ? this.startTime.toJSON() : <any>undefined;
-        data["endTime"] = this.endTime ? this.endTime.toJSON() : <any>undefined;
+        data["lineaId"] = this.lineaId;
+        data["startTime"] = this.startTime;
+        data["endTime"] = this.endTime;
         data["status"] = this.status;
         data["isBorrado"] = this.isBorrado;
         return data;
@@ -1529,9 +1542,9 @@ export class CreateServiciosLineaCommand implements ICreateServiciosLineaCommand
 }
 
 export interface ICreateServiciosLineaCommand {
-    idLinea?: number;
-    startTime?: Timer | undefined;
-    endTime?: Timer | undefined;
+    lineaId?: number;
+    startTime?: string | undefined;
+    endTime?: string | undefined;
     status?: boolean;
     isBorrado?: boolean;
 }

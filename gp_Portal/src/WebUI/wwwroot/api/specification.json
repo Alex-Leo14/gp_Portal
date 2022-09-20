@@ -141,7 +141,7 @@
         "operationId": "ServiciosLinea_GetServiciosLineaWithPagination",
         "parameters": [
           {
-            "name": "IdLinea",
+            "name": "LineaId",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -757,6 +757,42 @@
           },
           "status": {
             "type": "boolean"
+          },
+          "listServicio": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ServiciosLineaDto"
+            }
+          }
+        }
+      },
+      "ServiciosLineaDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idLinea": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "duration",
+            "nullable": true
+          },
+          "endTime": {
+            "type": "string",
+            "format": "duration",
+            "nullable": true
+          },
+          "status": {
+            "type": "boolean"
+          },
+          "isBorrado": {
+            "type": "boolean"
           }
         }
       },
@@ -844,25 +880,18 @@
             "type": "integer",
             "format": "int32"
           },
-          "idLinea": {
+          "lineaId": {
             "type": "integer",
             "format": "int32"
           },
           "startTime": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Timer"
-              }
-            ]
+            "type": "string",
+            "format": "duration"
           },
           "endTime": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Timer"
-              }
-            ]
+            "type": "string",
+            "format": "duration",
+            "nullable": true
           },
           "status": {
             "type": "boolean"
@@ -872,45 +901,23 @@
           }
         }
       },
-      "Timer": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/MarshalByRefObject"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false
-          }
-        ]
-      },
-      "MarshalByRefObject": {
-        "type": "object",
-        "x-abstract": true,
-        "additionalProperties": false
-      },
       "CreateServiciosLineaCommand": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "idLinea": {
+          "lineaId": {
             "type": "integer",
             "format": "int32"
           },
           "startTime": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Timer"
-              }
-            ]
+            "type": "string",
+            "format": "duration",
+            "nullable": true
           },
           "endTime": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Timer"
-              }
-            ]
+            "type": "string",
+            "format": "duration",
+            "nullable": true
           },
           "status": {
             "type": "boolean"
