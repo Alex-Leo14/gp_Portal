@@ -25,21 +25,36 @@ public class CreateServiciosLineaCommandHandler : IRequestHandler<CreateServicio
 
     public async Task<int> Handle(CreateServiciosLineaCommand request, CancellationToken cancellationToken)
     {
-        var entity = new ServiciosLineaBE
-        {
-            LineaId = request.LineaId,
-            StartTime = request.StartTime,
-            EndTime = request.EndTime,
-            Status = request.Status,
-            IsBorrado = false,
-        };
+        //var entity = new ServiciosLineaBE
+        //{
+        //    LineaId = request.LineaId,
+        //    StartTime = request.StartTime,
+        //    EndTime = request.EndTime,
+        //    Status = request.Status,
+        //    IsBorrado = false,
+        //};
 
-        entity.AddDomainEvent(new ServiciosLineaCreatedEvent(entity));
+        //entity.AddDomainEvent(new ServiciosLineaCreatedEvent(entity));
+
+        //_context.ServiciosLineas.Add(entity);
+
+        //await _context.SaveChangesAsync(cancellationToken);
+
+        //return entity.Id;
+
+        var entity = new ServiciosLineaBE();
+
+        entity.LineaId = request.LineaId;
+        entity.StartTime = request.StartTime;
+        entity.EndTime = request.EndTime;
+        entity.Status = request.Status;
+        entity.IsBorrado = request.Equals(0);
 
         _context.ServiciosLineas.Add(entity);
 
         await _context.SaveChangesAsync(cancellationToken);
 
         return entity.Id;
+
     }
 }

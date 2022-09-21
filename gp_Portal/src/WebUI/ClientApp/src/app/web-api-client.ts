@@ -240,7 +240,7 @@ export class LineaBEClient implements ILineaBEClient {
 }
 
 export interface IServiciosLineaClient {
-    getServiciosLineaWithPagination(lineaId: number | undefined, pageNumber: number | undefined, pageSize: number | undefined): Observable<PaginatedListOfServiciosLineaBriefDto>;
+    listByLineaId(iD: number | undefined): Observable<ServiciosLineaVm>;
     create(command: CreateServiciosLineaCommand): Observable<number>;
     update(id: number, command: UpdateServiciosLineaCommand): Observable<FileResponse>;
     delete(id: number): Observable<FileResponse>;
@@ -259,20 +259,12 @@ export class ServiciosLineaClient implements IServiciosLineaClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    getServiciosLineaWithPagination(lineaId: number | undefined, pageNumber: number | undefined, pageSize: number | undefined): Observable<PaginatedListOfServiciosLineaBriefDto> {
+    listByLineaId(iD: number | undefined): Observable<ServiciosLineaVm> {
         let url_ = this.baseUrl + "/api/ServiciosLinea?";
-        if (lineaId === null)
-            throw new Error("The parameter 'lineaId' cannot be null.");
-        else if (lineaId !== undefined)
-            url_ += "LineaId=" + encodeURIComponent("" + lineaId) + "&";
-        if (pageNumber === null)
-            throw new Error("The parameter 'pageNumber' cannot be null.");
-        else if (pageNumber !== undefined)
-            url_ += "PageNumber=" + encodeURIComponent("" + pageNumber) + "&";
-        if (pageSize === null)
-            throw new Error("The parameter 'pageSize' cannot be null.");
-        else if (pageSize !== undefined)
-            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (iD === null)
+            throw new Error("The parameter 'iD' cannot be null.");
+        else if (iD !== undefined)
+            url_ += "ID=" + encodeURIComponent("" + iD) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -284,20 +276,20 @@ export class ServiciosLineaClient implements IServiciosLineaClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetServiciosLineaWithPagination(response_);
+            return this.processListByLineaId(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetServiciosLineaWithPagination(response_ as any);
+                    return this.processListByLineaId(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<PaginatedListOfServiciosLineaBriefDto>;
+                    return _observableThrow(e) as any as Observable<ServiciosLineaVm>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<PaginatedListOfServiciosLineaBriefDto>;
+                return _observableThrow(response_) as any as Observable<ServiciosLineaVm>;
         }));
     }
 
-    protected processGetServiciosLineaWithPagination(response: HttpResponseBase): Observable<PaginatedListOfServiciosLineaBriefDto> {
+    protected processListByLineaId(response: HttpResponseBase): Observable<ServiciosLineaVm> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -308,7 +300,7 @@ export class ServiciosLineaClient implements IServiciosLineaClient {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = PaginatedListOfServiciosLineaBriefDto.fromJS(resultData200);
+            result200 = ServiciosLineaVm.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1377,15 +1369,10 @@ export interface IUpdateLineaBECommand {
     status?: boolean;
 }
 
-export class PaginatedListOfServiciosLineaBriefDto implements IPaginatedListOfServiciosLineaBriefDto {
-    items?: ServiciosLineaBriefDto[];
-    pageNumber?: number;
-    totalPages?: number;
-    totalCount?: number;
-    hasPreviousPage?: boolean;
-    hasNextPage?: boolean;
+export class ServiciosLineaVm implements IServiciosLineaVm {
+    lists?: ServiciosLineaDto2[];
 
-    constructor(data?: IPaginatedListOfServiciosLineaBriefDto) {
+    constructor(data?: IServiciosLineaVm) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1396,60 +1383,45 @@ export class PaginatedListOfServiciosLineaBriefDto implements IPaginatedListOfSe
 
     init(_data?: any) {
         if (_data) {
-            if (Array.isArray(_data["items"])) {
-                this.items = [] as any;
-                for (let item of _data["items"])
-                    this.items!.push(ServiciosLineaBriefDto.fromJS(item));
+            if (Array.isArray(_data["lists"])) {
+                this.lists = [] as any;
+                for (let item of _data["lists"])
+                    this.lists!.push(ServiciosLineaDto2.fromJS(item));
             }
-            this.pageNumber = _data["pageNumber"];
-            this.totalPages = _data["totalPages"];
-            this.totalCount = _data["totalCount"];
-            this.hasPreviousPage = _data["hasPreviousPage"];
-            this.hasNextPage = _data["hasNextPage"];
         }
     }
 
-    static fromJS(data: any): PaginatedListOfServiciosLineaBriefDto {
+    static fromJS(data: any): ServiciosLineaVm {
         data = typeof data === 'object' ? data : {};
-        let result = new PaginatedListOfServiciosLineaBriefDto();
+        let result = new ServiciosLineaVm();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.items)) {
-            data["items"] = [];
-            for (let item of this.items)
-                data["items"].push(item.toJSON());
+        if (Array.isArray(this.lists)) {
+            data["lists"] = [];
+            for (let item of this.lists)
+                data["lists"].push(item.toJSON());
         }
-        data["pageNumber"] = this.pageNumber;
-        data["totalPages"] = this.totalPages;
-        data["totalCount"] = this.totalCount;
-        data["hasPreviousPage"] = this.hasPreviousPage;
-        data["hasNextPage"] = this.hasNextPage;
         return data;
     }
 }
 
-export interface IPaginatedListOfServiciosLineaBriefDto {
-    items?: ServiciosLineaBriefDto[];
-    pageNumber?: number;
-    totalPages?: number;
-    totalCount?: number;
-    hasPreviousPage?: boolean;
-    hasNextPage?: boolean;
+export interface IServiciosLineaVm {
+    lists?: ServiciosLineaDto2[];
 }
 
-export class ServiciosLineaBriefDto implements IServiciosLineaBriefDto {
+export class ServiciosLineaDto2 implements IServiciosLineaDto2 {
     id?: number;
     lineaId?: number;
-    startTime?: string;
+    startTime?: string | undefined;
     endTime?: string | undefined;
     status?: boolean;
     isBorrado?: boolean;
 
-    constructor(data?: IServiciosLineaBriefDto) {
+    constructor(data?: IServiciosLineaDto2) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1469,9 +1441,9 @@ export class ServiciosLineaBriefDto implements IServiciosLineaBriefDto {
         }
     }
 
-    static fromJS(data: any): ServiciosLineaBriefDto {
+    static fromJS(data: any): ServiciosLineaDto2 {
         data = typeof data === 'object' ? data : {};
-        let result = new ServiciosLineaBriefDto();
+        let result = new ServiciosLineaDto2();
         result.init(data);
         return result;
     }
@@ -1488,10 +1460,10 @@ export class ServiciosLineaBriefDto implements IServiciosLineaBriefDto {
     }
 }
 
-export interface IServiciosLineaBriefDto {
+export interface IServiciosLineaDto2 {
     id?: number;
     lineaId?: number;
-    startTime?: string;
+    startTime?: string | undefined;
     endTime?: string | undefined;
     status?: boolean;
     isBorrado?: boolean;

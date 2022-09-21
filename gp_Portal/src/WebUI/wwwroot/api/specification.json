@@ -138,34 +138,16 @@
         "tags": [
           "ServiciosLinea"
         ],
-        "operationId": "ServiciosLinea_GetServiciosLineaWithPagination",
+        "operationId": "ServiciosLinea_ListByLineaId",
         "parameters": [
           {
-            "name": "LineaId",
+            "name": "ID",
             "in": "query",
             "schema": {
               "type": "integer",
               "format": "int32"
             },
             "x-position": 1
-          },
-          {
-            "name": "PageNumber",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 2
-          },
-          {
-            "name": "PageSize",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 3
           }
         ],
         "responses": {
@@ -174,7 +156,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaginatedListOfServiciosLineaBriefDto"
+                  "$ref": "#/components/schemas/ServiciosLineaVm"
                 }
               }
             }
@@ -842,37 +824,19 @@
           }
         }
       },
-      "PaginatedListOfServiciosLineaBriefDto": {
+      "ServiciosLineaVm": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "items": {
+          "lists": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ServiciosLineaBriefDto"
+              "$ref": "#/components/schemas/ServiciosLineaDto2"
             }
-          },
-          "pageNumber": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "totalPages": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "totalCount": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "hasPreviousPage": {
-            "type": "boolean"
-          },
-          "hasNextPage": {
-            "type": "boolean"
           }
         }
       },
-      "ServiciosLineaBriefDto": {
+      "ServiciosLineaDto2": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -886,7 +850,8 @@
           },
           "startTime": {
             "type": "string",
-            "format": "duration"
+            "format": "duration",
+            "nullable": true
           },
           "endTime": {
             "type": "string",

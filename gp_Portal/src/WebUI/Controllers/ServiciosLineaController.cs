@@ -6,17 +6,30 @@ using gp_Portal.Application.ServicioLinea.Queries.GetServiciosLineaWithPaginatio
 using gp_Portal.Application.ServicioLinea.Commands.CreateServiciosLinea;
 using gp_Portal.Application.ServicioLinea.Commands.UpdateServiciosLinea;
 using gp_Portal.Application.ServicioLinea.Commands.DeleteServiciosLinea;
+using gp_Portal.Application.Linea.Queries.GetLineaBE;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace gp_Portal.WebUI.Controllers;
 
 [AllowAnonymous]
 public class ServiciosLineaController : ApiControllerBase
 {
+    //[HttpGet]
+    //public async Task<ActionResult<PaginatedList<Application.ServicioLinea.Queries.GetServiciosLineaWithPagination.ServiciosLineaDto>>> GetServiciosLineaWithPagination([FromQuery] GetServiciosLineaWithPaginationQuery query)
+    //{
+    //    return await Mediator.Send(query);
+    //}
+
     [HttpGet]
-    public async Task<ActionResult<PaginatedList<ServiciosLineaBriefDto>>> GetServiciosLineaWithPagination([FromQuery] GetServiciosLineaWithPaginationQuery query)
+    public async Task<ActionResult<ServiciosLineaVm>> ListByLineaId(int ID)
     {
-        return await Mediator.Send(query);
+   
+        
+            return await Mediator.Send(new GetServiciosLineaQuery(ID));
+
+
     }
+
 
     [HttpPost]
     public async Task<ActionResult<int>> Create(CreateServiciosLineaCommand command)

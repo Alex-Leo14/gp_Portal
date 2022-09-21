@@ -6,6 +6,7 @@ using gp_Portal.Application.Linea.Queries.GetLineaBE;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using gp_Portal.Application.ServicioLinea.Queries.GetServiciosLineaWithPagination;
 
 namespace gp_Portal.WebUI.Controllers;
 

@@ -6,7 +6,7 @@ using gp_Portal.Application.Common.Models;
 using MediatR;
 
 namespace gp_Portal.Application.ServicioLinea.Queries.GetServiciosLineaWithPagination;
-public record GetServiciosLineaWithPaginationQuery : IRequest<PaginatedList<ServiciosLineaBriefDto>>
+public record GetServiciosLineaWithPaginationQuery : IRequest<PaginatedList<ServiciosLineaDto>>
 {
     public int LineaId { get; init; }
     public int PageNumber { get; init; } = 1;
@@ -14,7 +14,7 @@ public record GetServiciosLineaWithPaginationQuery : IRequest<PaginatedList<Serv
 
 }
 
-public class GetServiciosLineaWithPaginationQueryHandler : IRequestHandler<GetServiciosLineaWithPaginationQuery, PaginatedList<ServiciosLineaBriefDto>>
+public class GetServiciosLineaWithPaginationQueryHandler : IRequestHandler<GetServiciosLineaWithPaginationQuery, PaginatedList<ServiciosLineaDto>>
 {
     private readonly IApplicationDbContext _context;
     private readonly IMapper _mapper;
@@ -25,12 +25,12 @@ public class GetServiciosLineaWithPaginationQueryHandler : IRequestHandler<GetSe
         _mapper = mapper;
     }
 
-    public async Task<PaginatedList<ServiciosLineaBriefDto>> Handle(GetServiciosLineaWithPaginationQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<ServiciosLineaDto>> Handle(GetServiciosLineaWithPaginationQuery request, CancellationToken cancellationToken)
     {
         return await _context.ServiciosLineas
             .Where(x => x.LineaId == request.LineaId)
             .OrderBy(x => x.StartTime)
-            .ProjectTo<ServiciosLineaBriefDto>(_mapper.ConfigurationProvider)
+            .ProjectTo<ServiciosLineaDto>(_mapper.ConfigurationProvider)
             .PaginatedListAsync(request.PageNumber, request.PageSize);
     }
 }
