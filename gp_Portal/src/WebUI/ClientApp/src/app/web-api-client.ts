@@ -1523,6 +1523,7 @@ export interface ICreateServiciosLineaCommand {
 
 export class UpdateServiciosLineaCommand implements IUpdateServiciosLineaCommand {
     id?: number;
+    lineaId?: number;
     startTime?: string | undefined;
     endTime?: string | undefined;
     status?: boolean;
@@ -1540,6 +1541,7 @@ export class UpdateServiciosLineaCommand implements IUpdateServiciosLineaCommand
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
+            this.lineaId = _data["lineaId"];
             this.startTime = _data["startTime"];
             this.endTime = _data["endTime"];
             this.status = _data["status"];
@@ -1557,6 +1559,7 @@ export class UpdateServiciosLineaCommand implements IUpdateServiciosLineaCommand
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
+        data["lineaId"] = this.lineaId;
         data["startTime"] = this.startTime;
         data["endTime"] = this.endTime;
         data["status"] = this.status;
@@ -1567,6 +1570,7 @@ export class UpdateServiciosLineaCommand implements IUpdateServiciosLineaCommand
 
 export interface IUpdateServiciosLineaCommand {
     id?: number;
+    lineaId?: number;
     startTime?: string | undefined;
     endTime?: string | undefined;
     status?: boolean;

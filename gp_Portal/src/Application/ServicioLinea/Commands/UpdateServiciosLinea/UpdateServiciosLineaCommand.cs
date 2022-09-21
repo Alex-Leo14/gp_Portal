@@ -7,6 +7,7 @@ namespace gp_Portal.Application.ServicioLinea.Commands.UpdateServiciosLinea;
 public record UpdateServiciosLineaCommand : IRequest
 {
     public int Id { get; init; }
+    public int LineaId { get; init; }
     public TimeSpan? StartTime { get; set; }
     public TimeSpan? EndTime { get; set; }
     public bool Status { get; set; }
@@ -35,6 +36,7 @@ public class UpdateServiciosLineaCommandHandler : IRequestHandler<UpdateServicio
         entity.StartTime = request.StartTime;
         entity.EndTime = request.EndTime;
         entity.Status = request.Status;
+        entity.LineaId = request.LineaId;
         entity.IsBorrado = request.IsBorrado;
 
         await _context.SaveChangesAsync(cancellationToken);

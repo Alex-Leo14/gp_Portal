@@ -23,11 +23,8 @@ public class DeleteLineaBECommandHandler : IRequestHandler<DeleteLineaBECommand>
 
     public async Task<Unit> Handle(DeleteLineaBECommand request, CancellationToken cancellationToken)
     {
-        //var entity = await _context.Lineas
-        //    .Where(l => l.Id == request.Id)
-        //    .SingleOrDefaultAsync(cancellationToken);
         var entity = await _context.Lineas
-    .FindAsync(new object[] { request.Id }, cancellationToken);
+        .FindAsync(new object[] { request.Id }, cancellationToken);
 
 
 
@@ -36,7 +33,6 @@ public class DeleteLineaBECommandHandler : IRequestHandler<DeleteLineaBECommand>
             throw new NotFoundException(nameof(LineaBE), request.Id);
         }
 
-        //_context.Lineas.Remove(entity);
         entity.Status = request.Equals(0);
 
 

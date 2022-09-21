@@ -29,6 +29,7 @@ public class GetLineaQueryHandler : IRequestHandler<GetLineaBEQuery, LineaVm>
 
             Lists = await _context.Lineas
                 .AsNoTracking()
+                .Where(t=>t.Status.Equals(true))
                 .ProjectTo<LineaDto>(_mapper.ConfigurationProvider)
                 .OrderBy(t => t.Name)
                 .ToListAsync(cancellationToken)

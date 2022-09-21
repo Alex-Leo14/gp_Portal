@@ -900,6 +900,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "lineaId": {
+            "type": "integer",
+            "format": "int32"
+          },
           "startTime": {
             "type": "string",
             "format": "duration",

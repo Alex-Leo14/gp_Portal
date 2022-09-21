@@ -5,7 +5,12 @@ using gp_Portal.Domain.Events;
 using MediatR;
 
 namespace gp_Portal.Application.ServicioLinea.Commands.DeleteServiciosLinea;
-public record DeleteServiciosLineaCommand(int Id) : IRequest;
+public record DeleteServiciosLineaCommand(int Id) : IRequest
+{
+    public bool Status { get; set; }
+
+};
+
 
 public class DeleteServiciosLineaCommandHandler : IRequestHandler<DeleteServiciosLineaCommand>
 {
@@ -26,12 +31,19 @@ public class DeleteServiciosLineaCommandHandler : IRequestHandler<DeleteServicio
             throw new NotFoundException(nameof(ServiciosLineaBE), request.Id);
         }
 
-        _context.ServiciosLineas.Remove(entity);
+        entity.Status = request.Equals(0);
 
-        entity.AddDomainEvent(new ServiciosLineaDeletedEvent(entity));
 
         await _context.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
+
+        //_context.ServiciosLineas.Remove(entity);
+
+        //entity.AddDomainEvent(new ServiciosLineaDeletedEvent(entity));
+
+        //await _context.SaveChangesAsync(cancellationToken);
+
+        //return Unit.Value;
     }
 }
