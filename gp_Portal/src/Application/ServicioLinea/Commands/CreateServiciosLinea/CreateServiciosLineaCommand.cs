@@ -48,7 +48,7 @@ public class CreateServiciosLineaCommandHandler : IRequestHandler<CreateServicio
         entity.StartTime = request.StartTime;
         entity.EndTime = request.EndTime;
         entity.Status = request.Status;
-        entity.IsBorrado = request.Equals(0);
+        entity.IsBorrado = request.IsBorrado;
 
         _context.ServiciosLineas.Add(entity);
 

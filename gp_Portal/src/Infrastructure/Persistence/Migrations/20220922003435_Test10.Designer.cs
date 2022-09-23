@@ -12,8 +12,8 @@ using gp_Portal.Infrastructure.Persistence;
 namespace gp_Portal.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220920222719_second")]
-    partial class second
+    [Migration("20220922003435_Test10")]
+    partial class Test10
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

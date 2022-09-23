@@ -4,7 +4,7 @@
 
 namespace gp_Portal.Infrastructure.Persistence.Migrations
 {
-    public partial class init : Migration
+    public partial class Test10 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
