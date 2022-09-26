@@ -3,8 +3,6 @@ using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using gp_Portal.Application.Common.Interfaces;
-using gp_Portal.Application.Common.Security;
-using gp_Portal.Domain.Enums;
 
 namespace gp_Portal.Application.Linea.Queries.GetLineaBE;
 
@@ -31,7 +29,6 @@ public class GetLineaQueryHandler : IRequestHandler<GetLineaBEQuery, LineaVm>
                 .AsNoTracking()
                 .Where(t=>t.Status.Equals(true))
                 .ProjectTo<LineaDto>(_mapper.ConfigurationProvider)
-                .OrderBy(t => t.Name)
                 .ToListAsync(cancellationToken)
         };
     }

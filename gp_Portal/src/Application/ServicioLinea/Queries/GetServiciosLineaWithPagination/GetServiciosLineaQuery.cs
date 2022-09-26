@@ -23,8 +23,6 @@ public class GetServiciosLineaQueryHandler : IRequestHandler<GetServiciosLineaQu
         _context = context;
         _mapper = mapper;
     }
-
-
     public async Task<ServiciosLineaVm> Handle(GetServiciosLineaQuery request, CancellationToken cancellationToken)
     {
         var entity = await _context.ServiciosLineas
@@ -40,19 +38,11 @@ public class GetServiciosLineaQueryHandler : IRequestHandler<GetServiciosLineaQu
         {
             return new ServiciosLineaVm
             {
-
              Lists = await _context.ServiciosLineas
             .Where(x => x.LineaId == request.LineaId)
-            .OrderBy(t => t.StartTime)
             .ProjectTo<ServiciosLineaDto>(_mapper.ConfigurationProvider)
             .ToListAsync(cancellationToken)
             };
-
-
         }
-
-
-
-
     }
 }

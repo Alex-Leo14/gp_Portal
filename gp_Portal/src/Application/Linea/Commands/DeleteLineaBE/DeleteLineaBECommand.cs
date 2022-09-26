@@ -26,15 +26,12 @@ public class DeleteLineaBECommandHandler : IRequestHandler<DeleteLineaBECommand>
         var entity = await _context.Lineas
         .FindAsync(new object[] { request.Id }, cancellationToken);
 
-
-
         if (entity == null)
         {
             throw new NotFoundException(nameof(LineaBE), request.Id);
         }
 
         entity.Status = request.Equals(0);
-
 
         await _context.SaveChangesAsync(cancellationToken);
 

@@ -709,11 +709,31 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
+          "priorityLineaDto": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PriorityLineaDto"
+            }
+          },
           "lists": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/LineaDto"
             }
+          }
+        }
+      },
+      "PriorityLineaDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "value": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
           }
         }
       },

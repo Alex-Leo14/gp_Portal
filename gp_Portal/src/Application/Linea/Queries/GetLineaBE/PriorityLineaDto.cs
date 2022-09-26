@@ -1,4 +1,4 @@
-﻿namespace gp_Portal.Application.TodoLists.Queries.GetLineaBE;
+﻿namespace gp_Portal.Application.Linea.Queries.GetLineaBE;
 
 public class PriorityLineaDto
 {

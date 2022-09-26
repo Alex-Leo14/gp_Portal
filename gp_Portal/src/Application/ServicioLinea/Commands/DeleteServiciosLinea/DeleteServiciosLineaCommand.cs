@@ -37,13 +37,5 @@ public class DeleteServiciosLineaCommandHandler : IRequestHandler<DeleteServicio
         await _context.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
-
-        //_context.ServiciosLineas.Remove(entity);
-
-        //entity.AddDomainEvent(new ServiciosLineaDeletedEvent(entity));
-
-        //await _context.SaveChangesAsync(cancellationToken);
-
-        //return Unit.Value;
     }
 }

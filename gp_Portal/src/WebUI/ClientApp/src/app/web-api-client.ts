@@ -1106,6 +1106,7 @@ export class WeatherForecastClient implements IWeatherForecastClient {
 }
 
 export class LineaVm implements ILineaVm {
+    priorityLineaDto?: PriorityLineaDto[];
     lists?: LineaDto[];
 
     constructor(data?: ILineaVm) {
@@ -1119,6 +1120,11 @@ export class LineaVm implements ILineaVm {
 
     init(_data?: any) {
         if (_data) {
+            if (Array.isArray(_data["priorityLineaDto"])) {
+                this.priorityLineaDto = [] as any;
+                for (let item of _data["priorityLineaDto"])
+                    this.priorityLineaDto!.push(PriorityLineaDto.fromJS(item));
+            }
             if (Array.isArray(_data["lists"])) {
                 this.lists = [] as any;
                 for (let item of _data["lists"])
@@ -1136,6 +1142,11 @@ export class LineaVm implements ILineaVm {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.priorityLineaDto)) {
+            data["priorityLineaDto"] = [];
+            for (let item of this.priorityLineaDto)
+                data["priorityLineaDto"].push(item.toJSON());
+        }
         if (Array.isArray(this.lists)) {
             data["lists"] = [];
             for (let item of this.lists)
@@ -1146,7 +1157,48 @@ export class LineaVm implements ILineaVm {
 }
 
 export interface ILineaVm {
+    priorityLineaDto?: PriorityLineaDto[];
     lists?: LineaDto[];
+}
+
+export class PriorityLineaDto implements IPriorityLineaDto {
+    value?: number;
+    name?: string | undefined;
+
+    constructor(data?: IPriorityLineaDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.value = _data["value"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): PriorityLineaDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PriorityLineaDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["value"] = this.value;
+        data["name"] = this.name;
+        return data;
+    }
+}
+
+export interface IPriorityLineaDto {
+    value?: number;
+    name?: string | undefined;
 }
 
 export class LineaDto implements ILineaDto {
