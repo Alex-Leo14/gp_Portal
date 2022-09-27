@@ -10,7 +10,7 @@ using gp_Portal.Application.ServicioLinea.Queries.GetServiciosLineaWithPaginatio
 
 namespace gp_Portal.WebUI.Controllers;
 
-[AllowAnonymous]
+[Authorize]
 public class LineaBEController : ApiControllerBase
 {
     [HttpGet]

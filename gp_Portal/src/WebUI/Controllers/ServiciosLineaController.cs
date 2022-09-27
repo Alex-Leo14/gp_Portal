@@ -7,7 +7,7 @@ using gp_Portal.Application.ServicioLinea.Commands.DeleteServiciosLinea;
 
 namespace gp_Portal.WebUI.Controllers;
 
-[AllowAnonymous]
+[Authorize]
 public class ServiciosLineaController : ApiControllerBase
 {
     [HttpGet]
